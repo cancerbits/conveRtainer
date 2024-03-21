@@ -1,0 +1,21 @@
+#!/bin/bash
+
+DATA_PATH=$(realpath $1)
+DATA_DIR=$(dirname $DATA_PATH)
+if [ "$DATA_PATH" == "" ] ; then
+	"usage: ./seurat_to_h5ad PATH-TO-RDS-FILE"
+	exit 1
+fi
+
+CONTAINER="satijalab/seurat:4.3.0"
+
+echo "---"
+echo "Input: $DATA_PATH"
+echo "---"
+
+podman run -i -t --rm \
+	--name "convertainer_${USER}_seurat_to_h5ad" \
+	-e RUNROOTLESS=false \
+	--volume="$DATA_DIR":"$DATA_DIR" \
+	$CONTAINER \
+	R -e "library(SeuratDisk); message('Read $DATA_PATH..'); so <- readRDS('$DATA_PATH'); print(so); message('Write $DATA_PATH.h5Seurat..'); SaveH5Seurat(so, overwrite = TRUE, filename = '$DATA_PATH.h5Seurat'); message('Convert to $DATA_PATH.h5ad..'); Convert('$DATA_PATH.h5Seurat', overwrite = TRUE, dest = 'h5ad');"
