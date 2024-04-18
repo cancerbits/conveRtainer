@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DATA_PATH=$(realpath $1)
+DATA_DIR=$(dirname $DATA_PATH)
+if [ "$DATA_PATH" == "" ] ; then
+	"usage: ./seurat_to_h5ad PATH-TO-RDS-FILE"
+	exit 1
+fi
+
+CONTAINER="cancerbits/cb_seurat_to_zarr:1.0"
+
+echo "seurat_to_h5ad: $DATA_PATH --> $DATA_PATH.h5ad.zarr/"
+
+if [ ! -f $DATA_PATH.h5ad ] ; then
+	./seurat_to_h5ad $DATA_PATH
+fi
+
+./h5ad_to_zarr $DATA_PATH.h5ad

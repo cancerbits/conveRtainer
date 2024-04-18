@@ -9,9 +9,7 @@ fi
 
 CONTAINER="satijalab/seurat:4.3.0"
 
-echo "---"
-echo "Input: $DATA_PATH"
-echo "---"
+echo "seurat_to_h5ad: $DATA_PATH --> $DATA_PATH.h5ad"
 
 podman run -i -t --rm \
 	--name "convertainer_${USER}_seurat_to_h5ad" \
