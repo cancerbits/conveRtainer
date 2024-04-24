@@ -9,10 +9,13 @@ fi
 
 CONTAINER="cancerbits/cb_seurat_to_zarr:1.0"
 
+SCRIPT=$(realpath "$0")
+SCRIPTPATH=$(dirname "$SCRIPT")
+
 echo "seurat_to_h5ad: $DATA_PATH --> $DATA_PATH.h5ad.zarr/"
 
 if [ ! -f $DATA_PATH.h5ad ] ; then
-	./seurat_to_h5ad $DATA_PATH
+	$SCRIPTPATH/seurat_to_h5ad $DATA_PATH
 fi
 
-./h5ad_to_zarr $DATA_PATH.h5ad
+$SCRIPTPATH/h5ad_to_zarr $DATA_PATH.h5ad
